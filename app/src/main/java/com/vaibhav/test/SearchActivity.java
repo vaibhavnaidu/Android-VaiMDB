@@ -34,10 +34,8 @@ public class SearchActivity extends ActionBarActivity {
 
 
     EditText name;
-    EditText year;
-    EditText cast ;
-    EditText rating;
     Button searchbtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +57,9 @@ public class SearchActivity extends ActionBarActivity {
 
     public void buttonclicked(View v) {
 
-        String url = "https://api.themoviedb.org/3/search/movie?api_key=609afd2686e040b87bd26a0822c368af&query="+name.getText().toString();
+        String a = name.getText().toString();
+        a = a.replaceAll(" ","+");
+        String url = "https://api.themoviedb.org/3/search/movie?api_key=609afd2686e040b87bd26a0822c368af&query=" +a;
 
         //searchbtn = (Button) findViewById(R.id.searchbtn);
         /*Log.w("Vai", name.getText().toString());
@@ -72,9 +72,4 @@ public class SearchActivity extends ActionBarActivity {
         startActivity(i);
 
     }
-
-
-
-
-
 }

@@ -5,7 +5,7 @@
     <string name="title_section2">Upcoming</string>
     <string name="search_menu">Search</string>
     <string name="action_search">Search</string>
-    <string name="search_title">Search by Category</string>
+    <string name="search_title">Search by keyword</string>
     <string name="search_btn">Search Now</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>

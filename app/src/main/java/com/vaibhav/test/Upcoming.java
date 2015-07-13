@@ -43,15 +43,18 @@ public class Upcoming extends Fragment{
         stk = (TableLayout) rootView.findViewById(R.id.table_up);
         TableRow tbrow = new TableRow(getActivity());
         tbrow.setMinimumHeight(30);
+        tbrow.setBackgroundColor(Color.GRAY);
         TextView td1 = new TextView(getActivity());
         TextView td2 = new TextView(getActivity());
         td1.setText("Name");
         td1.setTextColor(Color.BLACK);
         td1.setTextSize(25);
         td1.setWidth(350);
+        td1.setGravity(1);
         td2.setText("Release Date");
         td2.setTextColor(Color.BLACK);
         td2.setTextSize(25);
+        td1.setGravity(1);
         tbrow.addView(td1);
         tbrow.addView(td2);
         stk.addView(tbrow);
@@ -66,25 +69,17 @@ public class Upcoming extends Fragment{
         String result = "";
         try {
 
-            // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+                result = "Not working";
         }
-
+        catch (Exception e) {
+            Log.w("Vai", "Exception in GET");
+        }
         return result;
     }
 
@@ -111,11 +106,11 @@ public class Upcoming extends Fragment{
         protected void onPostExecute(String result) {
             try {
                 JSONObject json = new JSONObject(result);
-                Log.i("Vai","reached json vatiable");
+                //Log.i("Vai","reached json vatiable");
                 JSONArray results = json.getJSONArray("results");
-                Log.i("Vai","reached results vatiable");
+                //Log.i("Vai","reached results vatiable");
                 int n = results.length();
-                Log.i("Vai", String.valueOf(n));
+                //Log.i("Vai", String.valueOf(n));
                 for(int i=0;i<n;i++) {
                     title = results.getJSONObject(i).getString("title");
                     id = Integer.parseInt(results.getJSONObject(i).getString("id"));

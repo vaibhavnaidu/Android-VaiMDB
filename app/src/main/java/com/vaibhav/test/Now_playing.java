@@ -1,11 +1,8 @@
 package com.vaibhav.test;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,8 +17,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -35,7 +30,6 @@ public class Now_playing extends Fragment {
     int id;
     View rootView;
     TableLayout stk;
-    ImageView imageView;
 
 
     @Override
@@ -47,35 +41,36 @@ public class Now_playing extends Fragment {
         stk = (TableLayout) rootView.findViewById(R.id.table_np);
         TableRow tbrow = new TableRow(getActivity());
         tbrow.setMinimumHeight(30);
+        tbrow.setBackgroundColor(Color.GRAY);
         TextView td1 = new TextView(getActivity());
         TextView td2 = new TextView(getActivity());
         td1.setText("Name");
         td1.setTextColor(Color.BLACK);
         td1.setTextSize(25);
         td1.setWidth(350);
+        td1.setGravity(1);
         td2.setText("Release Date");
         td2.setTextColor(Color.BLACK);
         td2.setTextSize(25);
+        td2.setGravity(1);
         tbrow.addView(td1);
         tbrow.addView(td2);
         stk.addView(tbrow);
 
 
 
-        //Check Internet Connection
-        /*if(isConnected()){
+        /*Check Internet Connection
+        if(isConnected()){
             Log.w("Vai","Connected to internet");
         }
         else{
             Log.w("Vai", "Not Connected to internet");
         }*/
 
+        //Pass the url to HttpAsyncTask to get and parse the result
         new HttpAsyncTask().execute("https://api.themoviedb.org/3/movie/now_playing?api_key=609afd2686e040b87bd26a0822c368af");
 
        //Log.w("Vai",title[0]);
-
-
-
 
         return rootView;
     }
@@ -85,25 +80,17 @@ public class Now_playing extends Fragment {
         String result = "";
         try {
 
-            // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+                result = "Not working";
         }
-
+        catch (Exception e) {
+            Log.w("Vai", "Exception in GET");
+        }
         return result;
     }
 
@@ -157,46 +144,6 @@ public class Now_playing extends Fragment {
         }
     }
 
-    /*public class loadImageTask extends AsyncTask<String, Void, Void>
-    {
-        Drawable imgLoad;
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            // TODO Auto-generated method stub
-
-            imgLoad = LoadImageFromWeb(params[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-
-
-        }
-    }
-
-    public static Drawable LoadImageFromWeb(String url)
-    {
-        try
-        {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
-
-
 
     private void tableView(String title, String release_date, String backdrop_path, int id) {
         stk = (TableLayout) rootView.findViewById(R.id.table_np);
@@ -226,8 +173,6 @@ public class Now_playing extends Fragment {
                 detailsview(tmp);
             }
         });
-
-
     }
 
     public void detailsview(String id)

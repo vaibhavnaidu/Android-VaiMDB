@@ -43,10 +43,10 @@ public class DetailsActivity extends Activity {
         // Receiving the Data
 
         String id = i.getStringExtra("EXTRA_MESSAGE");
-        Log.w("Vai", "id is this " + id);
+        //Log.w("Vai", "id is this " + id);
 
         String url = "https://api.themoviedb.org/3/movie/"+id+"?api_key=609afd2686e040b87bd26a0822c368af";
-        Log.w("Vai",  url);
+        //Log.w("Vai",  url);
         new HttpAsyncTask().execute(url);
     }
 
@@ -55,25 +55,17 @@ public class DetailsActivity extends Activity {
         String result = "";
         try {
 
-            // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+                result = "Not working";
         }
-
+        catch (Exception e) {
+            Log.w("Vai", "Exception in GET");
+        }
         return result;
     }
 

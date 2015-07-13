@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,7 +27,6 @@ import java.io.InputStreamReader;
 
 public class SearchResults extends Activity {
 
-    View rootView;
     String title,backdrop_path,release_date;
     TableLayout stk;
     int id;
@@ -44,15 +44,18 @@ public class SearchResults extends Activity {
         stk = (TableLayout) findViewById(R.id.search_r);
         TableRow tbrow = new TableRow(this);
         tbrow.setMinimumHeight(30);
+        tbrow.setBackgroundColor(Color.GRAY);
         TextView td1 = new TextView(this);
         TextView td2 = new TextView(this);
         td1.setText("Name");
         td1.setTextColor(Color.BLACK);
         td1.setTextSize(25);
         td1.setWidth(350);
+        td1.setGravity(1);
         td2.setText("Release Date");
         td2.setTextColor(Color.BLACK);
         td2.setTextSize(25);
+        td2.setGravity(1);
         tbrow.addView(td1);
         tbrow.addView(td2);
         stk.addView(tbrow);
@@ -63,25 +66,17 @@ public class SearchResults extends Activity {
         String result = "";
         try {
 
-            // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
             if(inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+                result = "Not working";
         }
-
+        catch (Exception e) {
+            Log.w("Vai", "Exception in GET");
+        }
         return result;
     }
 
@@ -109,13 +104,17 @@ public class SearchResults extends Activity {
             try {
                 JSONObject json = new JSONObject(result);
                 JSONArray results = json.getJSONArray("results");
-                Log.w("Vai","jsonarray");
+                //Log.w("Vai","jsonarray");
                 int n = results.length();
-                Log.i("Vai", String.valueOf(n));
+                if(n==0){
+                    Toast.makeText(getApplicationContext(), "String not found, please try again with another string",
+                            Toast.LENGTH_LONG).show();
+                }
+                //Log.i("Vai", String.valueOf(n));
                 for(int i=0;i<n;i++) {
                     //String a = (results.getJSONObject(0).names()).toString();
                     title = results.getJSONObject(i).getString("title");
-                    Log.w("Vai",title);
+                    //Log.w("Vai",title);
                     id = Integer.parseInt(results.getJSONObject(i).getString("id"));
                     backdrop_path = results.getJSONObject(i).getString("backdrop_path");
                     release_date = results.getJSONObject(i).getString("release_date");
